@@ -1,0 +1,247 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accueil</title>
+    <!-- Font Awesome CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMt23cez/3paNdF+Xw2B9C3E6z8gpTN7kz8tx5a"
+      crossorigin="anonymous"
+    />
+    <style>
+      /* Base Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Body Styling */
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #f4f4f9;
+        color: #333;
+      }
+
+      /* Container for Centering Content */
+      .container {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+      }
+
+      /* Header Styling */
+      h2 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 1rem;
+      }
+
+      /* Paragraph Styling */
+      p {
+        font-size: 1rem;
+        color: #666;
+        margin: 0.5rem 0;
+      }
+
+      /* Button Styling */
+      button,
+      a.button {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover,
+      a.button:hover {
+        background-color: #0056b3;
+      }
+
+      /* Link Styling */
+      a {
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      a:hover {
+        color: #0056b3;
+      }
+
+      /* Navbar Styling */
+      .navbar {
+        background-color: rgba(0, 0, 0, 0.4);
+        color: #fff;
+        width: 100%;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .aac,
+      .creater {
+        color: white;
+        transform: translateX(-20px);
+      }
+
+      span {
+        color: #007bff;
+      }
+
+      /* Font Awesome Icon Styling */
+      .fa-bell {
+        font-size: 1.5rem;
+        color: black;
+        cursor: pointer;
+      }
+
+      .im {
+        color: #ffff00;
+      }
+
+      /* Styling for Login Time Table */
+      .login-time-table {
+        display: none;
+        margin-top: 20px;
+        align-items:center ; 
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        text-align: left;
+        border-collapse: collapse;
+        
+      }
+      #tab{
+        width: 60%;
+        height: 90%;
+        overflow: auto;
+      }
+
+      .login-time-table th,
+      .login-time-table td {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+      }
+
+      .login-time-table th {
+        background-color: #007bff;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <p class="aac">AAC(PRJ)</p>
+      <p class="creater">
+        <span> By </span> younes zerguine
+        <span class="span"> And </span> keffous Mohcen
+      </p>
+
+      <img
+        src="{% static 'svg.svg'%}"
+        class="im"
+        width="30"
+        alt="Example Image"
+        onclick="toggleLoginTimeTable()"
+      />
+    </div>
+
+    <div class="container">
+      {% if request.session.user_info %}
+      <h2>
+        Bienvenue, {{ request.session.user_info.nom }}
+        {{request.session.user_info.prenom }}!
+      </h2>
+      <p>Email: {{ request.session.user_info.email }}</p>
+      <p>Téléphone: {{ request.session.user_info.telephone }}</p>
+      <p>Last Connection: {{ request.session.user_info.last_login }}</p>
+      <button onclick="window.location.href='{% url 'deconnexion' %}'">
+        Déconnexion
+      </button>
+      {% else %}
+      <h2>Bienvenue!</h2>
+      <a href="{% url 'connexion' %}" class="button">Connexion</a>
+      {% endif %}
+    </div>
+
+    <div class="login-time-table" id="login-time-table">
+      <h3>Login Historique</h3>
+      <table id="tab">
+        <thead >
+          <tr>
+            <th>ID</th>
+            <th>Login Time</th>
+            <th>Connexion</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if login_data %}
+            {% for login in login_data %}
+            <tr>
+              <td>{{ login.id }}</td>
+              <td>{{ login.login_time }}</td>
+              <td>  {% if login.failed_at == "yes" %}
+                Failed 
+              {% else %}
+                Succeeded
+              {% endif %}</td>
+            </tr>
+            {% endfor %}
+          {% else %}
+          <tr>
+            <td colspan="4">No login attempts found.</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      let toggleFlag = false; // Corrected variable declaration
+
+      function toggleLoginTimeTable() {
+        const loginTimeTable = document.getElementById('login-time-table');
+        const container = document.querySelector('.container');
+
+        // Toggle visibility between container and login-time-table
+        toggleFlag = !toggleFlag;
+        
+        if (toggleFlag) {
+          container.style.display = 'none';
+          loginTimeTable.style.display = 'flex';
+        } else {
+          container.style.display = 'block';
+          loginTimeTable.style.display = 'none';
+        }
+      }
+    </script>
+    </script>
+  </body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscription</title>
+    <style>
+      /* Base Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Body Styling */
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #f4f4f9;
+        color: #333;
+      }
+
+      /* Container Styling */
+      .container {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 90%;
+        text-align: center; /* Center-aligns text, including the <a> link */
+      }
+
+      /* Header Styling */
+      h1 {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 1rem;
+      }
+
+      /* Form Styling */
+      form {
+        margin-top: 1rem;
+        text-align: left; /* Aligns form content to the left */
+      }
+
+      /* Button Styling */
+      button {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 1rem;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      /* Error Messages Styling */
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 1rem;
+      }
+
+      li {
+        background-color: #ffefef;
+        color: #d9534f;
+        padding: 0.5rem;
+        border-radius: 5px;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      /* Link Styling */
+      p {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+      }
+
+      a {
+        color: red;
+        text-decoration: none;
+        transition: color 0.3s ease;
+        display: inline-block;
+        margin-top: 1rem;
+      }
+
+      a:hover {
+        color: #0056b3;
+      }
+
+      /* Input and Label Styling */
+      input {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        display: block;
+        width: 90%;
+        margin: 0.5rem 0;
+      }
+
+      label {
+        width: 90%; /* Sets label width */
+        display: block;
+        margin: 0.5rem 0;
+        text-align: left; /* Aligns label text to the left */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Inscription</h1>
+      <form method="POST">
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit">S'inscrire</button>
+      </form>
+
+      {% if form.errors %}
+      <ul>
+        {% for field in form %} {% for error in field.errors %}
+        <li>{{ error }}</li>
+        {% endfor %} {% endfor %}
+      </ul>
+      {% endif %}
+
+      <p><a href="{% url 'connexion' %}">Se connecter</a></p>
+    </div>
+  </body>
+</html>
