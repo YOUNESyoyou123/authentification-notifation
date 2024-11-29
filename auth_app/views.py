@@ -153,7 +153,7 @@ def acceuil(request):
         login_data = None
 
     return render(request, 'acceuil.html', {'user_info': user_info , 'login_data': login_data} )
-
+    
 
 def deconnexion(request):
     logout(request)
